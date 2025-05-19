@@ -2,7 +2,7 @@
   "name": "jira-plugin",
   "displayName": "Jira Plugin",
   "description": "Manage your on-premises Jira in vscode",
-  "version": "0.22.2",
+  "version": "1.0.0",
   "publisher": "se-khm",
   "icon": "images/icons/icon.png",
   "galleryBanner": {
