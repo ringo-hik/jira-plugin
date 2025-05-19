@@ -3,7 +3,7 @@
   "displayName": "Jira Plugin",
   "description": "Manage your on-premises Jira in vscode",
   "version": "0.22.2",
-  "publisher": "gioboa",
+  "publisher": "se-khm",
   "icon": "images/icons/icon.png",
   "galleryBanner": {
     "color": "#3B4859",
@@ -11,18 +11,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gioboa/jira-plugin.git"
+    "url": "https://github.com/ringo-hik/jira-plugin.git"
   },
   "keywords": [
     "Jira",
     "vsCode"
   ],
-  "author": "gioboa",
+  "author": "Hakmin Kim",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gioboa/jira-plugin/issues"
+    "url": "https://github.com/ringo-hik/jira-plugin/issues"
   },
-  "homepage": "https://github.com/gioboa/jira-plugin#readme",
+  "homepage": "https://github.com/ringo-hik/jira-plugin#readme",
   "engines": {
     "vscode": "^1.31.0"
   },

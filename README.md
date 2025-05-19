@@ -17,10 +17,18 @@
 
 ## 설치 방법
 
-VS Code 퀵 오픈(Ctrl+P)을 실행하고 다음 명령어를 입력한 후 엔터를 누르세요.
-```
-ext install gioboa.jira-plugin
-```
+### 1. Solution Marketplace를 통한 설치
+
+1. VS Code 왼쪽 사이드바에서 확장(Extensions) 아이콘을 클릭합니다.
+2. 검색창에 "Jira Plugin"을 입력합니다.
+3. "Jira Plugin" (퍼블리셔: se-khm)을 찾아 "설치" 버튼을 클릭합니다.
+
+### 2. VSIX 파일을 통한 설치
+
+1. VSIX 파일을 다운로드 받습니다.
+2. VS Code 메뉴에서 "보기 > 명령 팔레트"를 선택하거나 `Ctrl+Shift+P`(Windows/Linux) 또는 `Cmd+Shift+P`(Mac)를 누릅니다.
+3. "Extensions: Install from VSIX"를 검색하여 선택합니다.
+4. 다운로드 받은 VSIX 파일을 선택합니다.
 
 ## 초기 설정하기
 
