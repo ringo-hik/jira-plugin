@@ -28,7 +28,7 @@ export default async function setupCredentials(): Promise<void> {
     await vscode.window.showInputBox({
       ignoreFocusOut: true,
       password: false,
-      placeHolder: 'Your Jira username or full email for OAuth',
+      placeHolder: 'Your Jira user ID',
     })
   );
 
@@ -36,7 +36,7 @@ export default async function setupCredentials(): Promise<void> {
     await vscode.window.showInputBox({
       ignoreFocusOut: true,
       password: true,
-      placeHolder: 'Your Jira password or token for OAuth',
+      placeHolder: 'Your Jira password or PAT',
     })
   );
 

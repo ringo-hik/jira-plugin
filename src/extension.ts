@@ -5,7 +5,6 @@ import { gitIntegration, issuesExplorer, statusBar, store } from './services';
 import { CONFIG_NAME } from './shared/constants';
 import { openSettingsDialog } from './commands/setup-settings';
 
-
 export const activate = async (context: vscode.ExtensionContext): Promise<void> => {
   const channel: vscode.OutputChannel = vscode.window.createOutputChannel(CONFIG_NAME.toUpperCase());
   context.subscriptions.push(channel);
@@ -15,11 +14,13 @@ export const activate = async (context: vscode.ExtensionContext): Promise<void> 
   context.subscriptions.push(statusBar);
   context.subscriptions.push(gitIntegration);
   context.subscriptions.push(...commands.register());
-  
+
   // Register the open settings command
-  context.subscriptions.push(vscode.commands.registerCommand('jira-plugin.openSettings', () => {
-    openSettingsDialog();
-  }));
+  context.subscriptions.push(
+    vscode.commands.registerCommand('jira-plugin.openSettings', () => {
+      openSettingsDialog();
+    })
+  );
   // create Jira Instance and try to connect
   await store.connectToJira();
 };
