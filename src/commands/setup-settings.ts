@@ -40,7 +40,9 @@ async function configureConnectionSettings() {
     value: configuration.get(CONFIG.BASE_URL),
   });
 
-  if (baseUrl === undefined) { return; } // User cancelled
+  if (baseUrl === undefined) {
+    return;
+  } // User cancelled
 
   await configuration.set(CONFIG.BASE_URL, baseUrl);
 
@@ -50,7 +52,9 @@ async function configureConnectionSettings() {
     value: configuration.get(CONFIG.USERNAME),
   });
 
-  if (username === undefined) { return; } // User cancelled
+  if (username === undefined) {
+    return;
+  } // User cancelled
 
   await configuration.set(CONFIG.USERNAME, username);
 
@@ -61,7 +65,9 @@ async function configureConnectionSettings() {
     password: true,
   });
 
-  if (password === undefined) { return; } // User cancelled
+  if (password === undefined) {
+    return;
+  } // User cancelled
 
   await configuration.setPassword(password);
 
@@ -91,7 +97,9 @@ async function configureProjectSettings() {
     value: configuration.get(CONFIG.WORKING_PROJECT),
   });
 
-  if (workingProject === undefined) { return; } // User cancelled
+  if (workingProject === undefined) {
+    return;
+  } // User cancelled
 
   await configuration.set(CONFIG.WORKING_PROJECT, workingProject);
 

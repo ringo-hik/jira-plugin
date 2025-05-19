@@ -49,8 +49,7 @@ export class Jira implements IJira {
     host = host.replace('https://', '').replace('http://', '');
     const portPosition = host.indexOf(':');
     const port = portPosition !== -1 ? host.substring(portPosition + 1) : undefined;
-    const strictSSL = configuration.get(CONFIG.STRICT_SSL);
-
+    
     if (portPosition !== -1) {
       host = host.substring(0, portPosition);
     }
@@ -61,7 +60,7 @@ export class Jira implements IJira {
       protocol,
       basic_auth: configuration.credentials,
       timeout: configuration.get(CONFIG.REQUESTS_TIMEOUT) * 1000 * 60,
-      strictSSL: false,
+      strictSSL: false, // Always disable SSL validation to support all Jira servers
     });
 
     patchJiraInstance(this.jiraInstance);
