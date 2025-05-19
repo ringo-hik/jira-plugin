@@ -59,3 +59,12 @@ typings/
 
 # next.js build output
 .next
+
+# test
+.vscode-test/
+
+# out
+out/
+
+# settings
+test/utils/settings.ts

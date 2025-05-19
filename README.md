@@ -1,2 +1,252 @@
-# vscode-jira-plugin
-Jira plugin for vscode
+# jira-plugin README
+
+## Key Features
+
+- [View Jira issues](#explorer)
+- Create new Jira issue
+- Change explorer 'Group By' field
+- [Search/Filter Jira issues](#filters)
+  - All issues
+  - Current sprint issues
+  - Issue by id
+  - Issues filtered by status
+  - Issues filtered by status and assignee
+  - Issues filtered by summary
+  - My issues filtered by status
+  - Favourites filters
+- Open Jira issue in the browser (left click on the issue)
+- Change Jira issue status
+- Change Jira issue assignee
+- Add comment to Jira issue
+- Copy to clipboard Jira issue Key+Summary
+- Copy to clipboard Jira issue remote url
+- Checkout or create git branch
+- [Set current working project](#working-project)
+- [Set current working issue](#working-issue)
+- [Trace the time spended on the current working issue](#working-issue)
+- Insert current Working Issue Key+Summary comment
+- [Jira Issue Key+Summary link to open Jira issue in the browser](#link-to-open-jira-issue-in-the-browser)
+- [Git Integration](#settings)
+- [Enable Check Notifications](#settings)
+
+## Changelog
+
+[Learn about the latest improvements][changelog].
+
+[changelog]: https://github.com/gioboa/jira-plugin/blob/master/CHANGELOG.md
+
+## Support
+
+**jira-plugin** is an open source extension.<br>While being free and open source, if you find it useful, please consider supporting it by donating.<br>**Thanks!**
+
+[[Become a backer](https://opencollective.com/jira-plugin#backers)]
+<a href="https://opencollective.com/jira-plugin#backers" target="_blank"><img src="https://opencollective.com/jira-plugin/backers.svg?width=890"></a><br><br>
+Your logo will show up here with a link to your website.
+<br><br>
+[<img src="https://raw.githubusercontent.com/gioboa/jira-plugin/develop/images/readme/DuMont_logo.jpg" width="160">](https://www.dumont.de/)
+
+## Installation
+
+Launch VS Code Quick Open (Ctrl+P), paste the following command, and press enter.<br>
+`ext install gioboa.jira-plugin`<br><br>
+
+## Usage
+
+From the command palette Ctrl-Shift-P (Windows, Linux) or Cmd-Shift-P (OSX) under **Jira-plugin** you have all the extension commands.<br><br>
+
+## Setup
+
+First of all your have to launch "Setup credentials" command to configure the plugin.<br>
+The Jira base URL is needed and also your credentials.<br>
+**n.b:** you can also use OAuth.
+
+- url: your base Atlassian url
+- username: your full email
+- password: the token
+
+![Setup](images/readme/setup.gif)
+
+## Set working project
+
+After setup you have to set the working project, you can click on status-bar icon or use "Set working project" command.<br><br>
+**n.b:** If you need to browse issues for various project you have to switch the working project.<br>
+
+![Set-working-project](images/readme/set-working-project.gif)
+
+## Settings
+
+The extension store credentials in VS Code settings.<br><br>
+**n.b:** the extension store the password in VS Code internal storage so it's safe and hidden. :wink: <br>
+
+- **Additional Statuses** <br>
+  Additional custom statuses, used for manage some Jira wrong behavior
+- **Base Url** <br>
+  Your Jira base URL (e.g. https://your_jira_base_url.com or http://your_jira_base_url.com:your_port)
+- **Default JQL Search** <br>
+  Here you can define your default/custom JQL search (n.b: WORKING_PROJECT is the placeholder for the current working project)
+- **Enable Check Notifications** <br>
+  You can manage your Jira **unread** notifications inside VsCode notification center (n.b: only new Jira versions has notifications)
+- **Enable Working Issue** <br>
+  Enable working issue functionality in status bar
+- **Git Integration** <br>
+  Automatically watch for branch switching and select appropriate project and working issue
+- **Group Task And Subtasks** <br>
+  Group task and subtasks into explorer
+- **Issue List Auto Refresh Interval** <br>
+  Refresh explorer every x minutes (n.b: setting to 0 disables auto-refresh)
+- **Number Of Issues In List** <br>
+  Number of issues to show in list (n.b: If you define high numbers the research can be slow)
+- **Project Key Mapping** <br>
+  Setting for map projects key for git integration (e.g. CUSTOMKEY=JIRAKEY)
+- **Projects To Hide** <br>
+  Here you can define which projects you want to hide (e.g. PROJECT-KEY-1, PROJECT-KEY-2, PROJECT-KEY-3)
+- **Projects To Show** <br>
+  Here you can define which projects you want to show (e.g. PROJECT-KEY-1, PROJECT-KEY-2, PROJECT-KEY-3)
+- **Requests Timeout** <br>
+  Jira requests timeout (expressed in minutes)
+- **StrictSSL param** <br>
+  Set strictSSL param value for all request
+- **Tracking Time Mode** <br>
+  Configure how the plugin tracking time for the working issue
+- **Tracking Time Mode Hybrid Timeout** <br>
+  Number of minutes to wait for the user to return to VSCode before discarding away time in hybrid time tracking mode
+- **Username** <br>
+  Your Jira username or full email for OAuth
+- **Working Issue Assignees** <br>
+  Assignees used for extract working issue list (e.g. robert.smith, michael.jones) (n.b: CURRENT_USER is the placeholder for the current user)
+- **Working Issue Change Status After Selection** <br>
+  Change working issue status after selection
+- **Working Issue Filter** <br>
+  Choose issue filter for 'Set Working Issue' results. WORKING_ISSUES (Your assigned issues) or ALL.
+- **Working Issue Show Timer** <br>
+  Show/Hide working issue timer in status bar
+- **Working Issue Statues** <br>
+  Statuses used for extract working issue list (e.g. In Progress, Development In Progress, Test in Progress)
+- **Working Project** <br>
+  Jira working project
+- **Worklog Minimum Tracking Time** <br>
+  Minimum tracking time for show the Worklog modal and create Jira worklog (expressed in minutes)
+
+**n.b:** setting: **Tracking Time Mode** <br>
+values:<br>
+
+1.  `hybrid` - will increment tracking time always but if VS Code remain idle more then "trackingTimeModeHybridTimeout" will discard the time addition<br>
+1.  `always` - will increment tracking time always <br>
+1.  `vsCodeFocus` - will increment tracking time only if VS Code is focused<br>
+1.  `never` - will not tracking time<br>
+
+## Explorer
+
+- In the explorer you can use all these extension command
+
+![Explorer](images/readme/explorer.png)
+
+## Explorer commands
+
+- **Create new ticket**<br>
+  With this command you can create new ticket.<br><br>
+- **Insert Working Issue Key+Summary comment**<br>
+  With this command you can insert Working Issue Key+Summary comment at the current position in the code.<br>
+  `You can set your custom keyboard shortcut to retrieve this command`<br><br>
+- **Group By**<br>
+  You can define how visualize issues inside the explorer.<br><br>
+
+### Filters
+
+- **Default JQL Search**<br>
+  Your default/custom JQL search<br><br>
+- **All issues**<br>
+  With this command you can search all issues for the current project.<br>
+  `project = '${project}' ORDER BY status ASC, updated DESC`<br><br>
+- **Current sprint issues**<br>
+  With this command you can search all issues for the current sprint.<br>
+  `project = '${project}' AND sprint in openSprints() and sprint not in futureSprints() ORDER BY status ASC, updated ASC`<br><br>
+- **Issue by id**<br>
+  With this command you can search an issue by id.<br>
+  `id = '${project}-${id}' ORDER BY status ASC, updated DESC`<br><br>
+- **Issues filtered by status**<br>
+  With this command you can search issues with a particular status.<br>
+  `project = '${project}' AND status = '${status}' ORDER BY status ASC, updated DESC`<br><br>
+- **Issues filtered by status and assignee**<br>
+  With this command you can search issues with a particular assignee and status.<br>
+  `project = '${project}' AND status = '${status}' AND assignee = ${assignee} ORDER BY status ASC, updated DESC`<br><br>
+- **Issues filtered by summary**<br>
+  With this command you can search issues with a particular summary.<br>
+  `project = '${project}' AND summary ~ '${summary}' ORDER BY status ASC, updated DESC`<br><br>
+- **My issues filtered by status**<br>
+  With this command you can search your issues with a particular status.<br>
+  `project = '${project}' AND status = '${status}' AND assignee in (currentUser()) ORDER BY status ASC, updated DESC`<br><br>
+- **Favourites filters**<br>
+  With this command you can search issues by using your Jira favoutite filters (create in `BASE_URL/issues/?jql=`).<br>
+  `only coherent "favorites filters" for the working project`<br><br>
+
+## Issue commands (right click on issue in explorer)
+
+![Issue Commands](images/readme/issue-commands.png)
+
+- **Add comment**<br>
+  With this command you can add comment. [@] is the placeholder for tag a user.<br>**e.g:** 'This is the placeholder for tag user -> [@]'<br><br>
+- **Change issue assignee**<br>
+  With this command you can change an issue assignee.<br><br>
+- **Change issue status**<br>
+  With this command you can change an issue status.<br><br>
+- **Copy Jira issue Key+Summary**<br>
+  With this command you can copy to clipboard Jira issue Key+Summary.<br><br>
+- **Copy Jira issue remote url**<br>
+  With this command you can copy to clipboard Jira issue remote url.<br><br>
+- **Checkout or create git branch**<br>
+  Whit this command you can manage git from explorer.<br><br>
+
+## Status bar
+
+### Working project
+
+- The extension in the status bar show the **working project**, you can also change it from here.
+
+![StatusBar](images/readme/status-bar.png)
+
+### Working issue
+
+- The extension in the status bar show the **working issue**, you can also change it from here. <br>
+  With **Working Issue Statues** setting you can define statuses used for extract working issue list.<br>
+  The extension trace the time spended on the working issue and you can also create the Jira worklog for the activity. <br>
+  Jira worklog allow only time in minute so the extension round your activity time. <br>
+  The extension **every 60 second** store in iternal storage the current working activity so if you close and reopen VS Code the extension retrieve (if needed) the pending working issue.
+
+![Working issue](images/readme/working-issue.gif)
+
+### Link to open Jira issue in the browser
+
+![Jira issue link](images/readme/jira-issue-link.png)
+
+## Want to contribute?
+
+If you want to file a bug, contribute some code or improve documentation, read up on [contributing guidelines](CONTRIBUTING.md), and check out [open issues](https://github.com/gioboa/jira-plugin/issues).
+
+## [Contributors](https://github.com/gioboa/jira-plugin/graphs/contributors)
+
+| [<img src="https://avatars2.githubusercontent.com/u/35845425?v=4" width="50px;" /><br /><sub><b>Giorgio Boa</b></sub>](https://github.com/gioboa) | [<img src="https://avatars1.githubusercontent.com/u/4991612?v=4" width="50px;" /><br /><sub><b>jumpkick</b></sub>](https://github.com/jumpkick)<br /> | [<img src="https://avatars3.githubusercontent.com/u/25907722?v=4" width="50px;" /><br /><sub><b>tiago-pullup</b></sub>](https://github.com/tiago-pullup)<br /> | [<img src="https://avatars1.githubusercontent.com/u/29225316?v=4" width="50px;" /><br /><sub><b>MXM-7</b></sub>](https://github.com/MXM-7)<br /> | [<img src="https://avatars0.githubusercontent.com/u/40208329?v=4" width="50px;" /><br /><sub><b>Diogo Paschoal</b></sub>](https://github.com/diogogeru)<br /> | [<img src="https://avatars3.githubusercontent.com/u/7826229?s=400&v=4" width="50px;" /><br /><sub><b>Ian Mackie</b></sub>](https://github.com/Kaffiend)<br /> | [<img src="https://avatars3.githubusercontent.com/u/2177810?s=400&v=4" width="50px;" /><br/><sub><b>Roman Ostolosh</b></sub>](https://github.com/knicefire)<br/> | [<img src="https://avatars1.githubusercontent.com/u/19175915?s=400&v=4" width="50px;" /><br/><sub><b>Keith Turley</b></sub>](https://github.com/keithturley)<br/> | [<img src="https://avatars3.githubusercontent.com/u/4190560?s=400&v=4" width="50px;" /><br/><sub><b>jjongman</b></sub>](https://github.com/jjongman)<br/> | [<img src="https://avatars3.githubusercontent.com/u/20464844?s=400&v=4" width="50px;" /><br/><sub><b>Dan Streeter</b></sub>](https://github.com/danstreeter)<br/> |
+| :-----------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----: |
+
+
+## License
+
+[![Version](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/gioboa/jira-plugin/blob/master/LICENSE)
+
+## Versioning
+
+`jira-plugin` will be maintained under the Semantic Versioning guidelines. Releases are numbered with the following format:
+
+```
+<MAJOR>.<MINOR>.<PATCH>
+```
+
+1.  **MAJOR** versions indicate incompatible API changes,
+2.  **MINOR** versions add functionality in a backwards-compatible manner, and
+3.  **PATCH** versions introduce backwards-compatible bug fixes.
+
+For more information on SemVer, please visit [http://semver.org](http://semver.org).
+
+## Resources
+
+Based on [Jira APIs](https://developer.atlassian.com/cloud/jira/platform/rest/)

@@ -1,0 +1,18 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "files.exclude": {
+    "out": false // set this to true to hide the "out" folder with the compiled JS files
+  },
+  "search.exclude": {
+    "out": true // set this to false to include "out" folder in search results
+  },
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#e6e6e6",
+    "titleBar.activeForeground": "#000000",
+    "titleBar.inactiveBackground": "#e6e6e6CC",
+    "titleBar.inactiveForeground": "#000000"
+  }
+}
