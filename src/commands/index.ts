@@ -13,6 +13,7 @@ import openIssue from './open-issue';
 import setWorkingIssue from './set-working-issue';
 import setWorkingProject from './set-working-project';
 import setupCredentials from './setup-credentials';
+import { openSettingsDialog } from './setup-settings';
 import stopWorkingIssue from './stop-working-issue';
 import toggleWorkingIssueTimer from './toggle-working-issue-timer';
 
@@ -28,6 +29,7 @@ export default {
     return [
       // initial setup
       registerCommand('jira-plugin.setupCredentials', setupCredentials),
+      registerCommand('jira-plugin.openSettings', openSettingsDialog),
 
       // working project / issue
       registerCommand('jira-plugin.setWorkingProject', setWorkingProject),

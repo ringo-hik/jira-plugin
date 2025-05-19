@@ -61,7 +61,7 @@ export class Jira implements IJira {
       protocol,
       basic_auth: configuration.credentials,
       timeout: configuration.get(CONFIG.REQUESTS_TIMEOUT) * 1000 * 60,
-      strictSSL: strictSSL !== '' ? strictSSL === 'true' : undefined,
+      strictSSL: false,
     });
 
     patchJiraInstance(this.jiraInstance);
