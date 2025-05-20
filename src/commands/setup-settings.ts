@@ -86,11 +86,40 @@ async function configureConnectionSettings() {
 
   // Reconnect to Jira
   await store.connectToJira();
-  
+
   // 호환성은 연결 과정에서 자동으로 검증되므로 여기서는 간단한 안내 메시지만 표시
-  vscode.window.showInformationMessage(
-    'Jira 연결 설정이 업데이트되었습니다. 이 확장은 Jira 서버 8.x 버전에서만 작동합니다.'
-  );
+  const message = 'Jira 연결 설정이 업데이트되었습니다. 이 확장은 Jira 서버 8.x 버전에서만 작동합니다.';
+  const testCompatButton = '호환성 테스트';
+  
+  const result = await vscode.window.showInformationMessage(message, testCompatButton);
+  
+  // 호환성 테스트 버튼 클릭 시 모의 테스트 실행 (사내망에서 테스트용)
+  if (result === testCompatButton) {
+    const versionInput = await vscode.window.showInputBox({
+      placeHolder: '테스트할 Jira 서버 버전을 입력하세요 (예: 7.13.0, 8.5.4, 9.0.0)',
+      prompt: '서버 버전 호환성 테스트',
+      value: '8.0.0',
+    });
+    
+    if (versionInput) {
+      // 모의 서버 버전으로 호환성 테스트
+      if (store.state.jira) {
+        const isCompatible = store.state.jira.isCompatibleServerVersion(versionInput);
+        if (isCompatible) {
+          vscode.window.showInformationMessage(
+            `호환성 테스트 통과: Jira 서버 버전 ${versionInput}은(는) 이 확장과 호환됩니다.`
+          );
+        } else {
+          vscode.window.showErrorMessage(
+            `호환성 테스트 실패: Jira 서버 버전 ${versionInput}은(는) 이 확장과 호환되지 않습니다. ` +
+            `이 확장은 Jira 서버 8.x 버전에서만 지원됩니다.`
+          );
+        }
+      } else {
+        vscode.window.showErrorMessage('Jira 클라이언트가 초기화되지 않았습니다.');
+      }
+    }
+  }
 }
 
 async function configureProjectSettings() {
