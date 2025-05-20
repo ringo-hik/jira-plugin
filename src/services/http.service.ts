@@ -49,7 +49,7 @@ export class Jira implements IJira {
     host = host.replace('https://', '').replace('http://', '');
     const portPosition = host.indexOf(':');
     const port = portPosition !== -1 ? host.substring(portPosition + 1) : undefined;
-    
+
     if (portPosition !== -1) {
       host = host.substring(0, portPosition);
     }
