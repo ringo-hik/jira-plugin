@@ -24,13 +24,13 @@
   },
   "homepage": "https://github.com/ringo-hik/jira-plugin#readme",
   "engines": {
-    "vscode": "^1.31.0"
+    "vscode": "^1.74.0"
   },
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "*"
+    "onStartupFinished"
   ],
   "main": "./out/src/extension",
   "scripts": {
