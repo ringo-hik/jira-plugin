@@ -8,7 +8,9 @@ import SelectValuesService from './select-values.service';
 import StatusBarService from './status-bar.service';
 import StoreService from './store.service';
 import UtilitiesService from './utilities.service';
+import { ConfigUIService } from './config-ui.service';
 
+// 서비스 인스턴스 생성
 export const store = new StoreService();
 export const configuration = new ConfigurationService();
 export const issuesExplorer = new IssuesExplorer();
@@ -19,3 +21,4 @@ export const gitIntegration = new GitIntegrationService();
 export const statusBar = new StatusBarService();
 export const notifications = new NotificationService();
 export const issueHelper = new IssueHelperService();
+export const configUI = new ConfigUIService();

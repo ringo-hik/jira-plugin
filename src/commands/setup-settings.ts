@@ -1,36 +1,76 @@
 import * as vscode from 'vscode';
-import { configuration, issuesExplorer, store } from '../services';
+import { configuration, configUI, issuesExplorer, store } from '../services';
 import { CONFIG } from '../shared/constants';
+import { ConfigGroup } from '../services/configuration.model';
 
+/**
+ * 설정 대화상자 열기
+ * 사용자가 설정을 구성할 수 있는 대화상자를 표시합니다.
+ */
 export async function openSettingsDialog() {
+  // 사용자 설정 구성 카테고리 목록
+  const sections = [
+    { 
+      label: 'Connection Settings', 
+      description: 'Configure Jira URL, username, and password',
+      group: ConfigGroup.CONNECTION
+    },
+    { 
+      label: 'Project Settings', 
+      description: 'Configure working project and related settings',
+      group: ConfigGroup.PROJECT
+    },
+    { 
+      label: 'Issue Settings', 
+      description: 'Configure working issue settings and filters',
+      group: ConfigGroup.ISSUE
+    },
+    { 
+      label: 'Display Settings', 
+      description: 'Configure explorer display settings',
+      group: ConfigGroup.DISPLAY
+    },
+  ];
+
+  // 사용자에게 설정 카테고리 선택 요청
   const section = await vscode.window.showQuickPick(
-    [
-      { label: 'Connection Settings', description: 'Configure Jira URL, username, and password' },
-      { label: 'Project Settings', description: 'Configure working project and related settings' },
-      { label: 'Issue Settings', description: 'Configure working issue settings and filters' },
-      { label: 'Display Settings', description: 'Configure explorer display settings' },
-    ],
+    sections,
     { placeHolder: 'Select settings section to configure' }
   );
 
   if (!section) {
-    return;
+    return; // 사용자가 취소함
   }
 
-  switch (section.label) {
-    case 'Connection Settings':
-      await configureConnectionSettings();
-      break;
-    case 'Project Settings':
-      await configureProjectSettings();
-      break;
-    case 'Issue Settings':
-      await configureIssueSettings();
-      break;
-    case 'Display Settings':
-      await configureDisplaySettings();
-      break;
-  }
+  // 확인을 위한 메시지 표시
+  const configuring = `Configuring ${section.label.toLowerCase()}...`;
+  await vscode.window.withProgress(
+    { 
+      location: vscode.ProgressLocation.Notification,
+      title: configuring,
+      cancellable: false
+    },
+    async () => {
+      // 선택한 설정 그룹에 따라 적절한 설정 UI 표시
+      switch (section.group) {
+        case ConfigGroup.CONNECTION:
+          // 연결 설정은 추상화된 UI를 사용하지 않고 직접 구현
+          // 비밀번호 처리 등의 특수한 로직이 필요하기 때문
+          await configureConnectionSettings();
+          break;
+          
+        default:
+          // 기타 설정은 추상화된 UI 사용
+          await configUI.showGroupSettings(section.group);
+          
+          // 설정 변경 후 필요한 업데이트 작업
+          if (section.group === ConfigGroup.PROJECT) {
+            issuesExplorer.refresh();
+          }
+          break;
+      }
+    }
+  );
 }
 
 async function configureConnectionSettings() {

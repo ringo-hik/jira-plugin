@@ -50,32 +50,76 @@ export default class ConfigurationService {
     return { username, password };
   }
 
-  // used for get only one setting
+  /**
+   * 설정값 가져오기 (추상화된 메서드)
+   * @param entry 설정 키 또는 메타데이터
+   * @param fallbackValue 기본값
+   * @returns 설정값
+   */
   public get(entry: string, fallbackValue = ''): any {
     if (!this.settings) {
       return fallbackValue;
     }
     
-    // Always return false for strictSSL regardless of the setting
+    // 특수 설정 처리 (하드코딩된 값이 필요한 경우)
     if (entry === CONFIG.STRICT_SSL) {
-      return "false";
+      return "false"; // SSL 인증 항상 비활성화
     }
     
-    return this.settings.hasOwnProperty(entry) && this.settings[entry] !== undefined ? this.settings[entry] : fallbackValue;
+    // 일반 설정 가져오기
+    return this.settings.hasOwnProperty(entry) && this.settings[entry] !== undefined 
+      ? this.settings[entry] 
+      : fallbackValue;
   }
 
-  // used for set only one setting
+  /**
+   * 설정값 저장 (추상화된 메서드)
+   * @param entry 설정 키 또는 메타데이터
+   * @param value 설정값
+   * @returns 설정 저장 결과
+   */
   public async set(entry: string, value: any): Promise<any> {
-    // remove / at the end if exist
-    if (entry === CONFIG.BASE_URL && typeof value === 'string') {
-      value = value.replace(/\/$/, '');
-    }
-    // update settings object - Fix issue #97
+    // 입력값 전처리
+    value = this.preprocessValue(entry, value);
+    
+    // 메모리에 설정 업데이트
     (<any>this.settings)[entry] = value;
-    // update VsCode settings
-    // save inside workspace folder if exist - Close #98
-    const globalConfigurationTarget = entry !== CONFIG.WORKING_PROJECT || !vscode.workspace.workspaceFolders;
-    return this.settings && this.settings.update(entry, value, globalConfigurationTarget);
+    
+    // 적절한 스코프 결정 (워크스페이스 vs 글로벌)
+    const isGlobalSetting = this.shouldUseGlobalScope(entry);
+    
+    // VS Code 설정에 저장
+    return this.settings && this.settings.update(entry, value, isGlobalSetting);
+  }
+  
+  /**
+   * 입력값 전처리 (값 정규화/정리)
+   * @param entry 설정 키
+   * @param value 원본 값
+   * @returns 처리된 값
+   */
+  private preprocessValue(entry: string, value: any): any {
+    // URL 입력값 정리 (끝의 슬래시 제거)
+    if (entry === CONFIG.BASE_URL && typeof value === 'string') {
+      return value.replace(/\/$/, '');
+    }
+    
+    return value;
+  }
+  
+  /**
+   * 글로벌 스코프 사용 여부 결정
+   * @param entry 설정 키
+   * @returns 글로벌 스코프 사용 여부
+   */
+  private shouldUseGlobalScope(entry: string): boolean {
+    // 워크스페이스 레벨의 설정인지 확인
+    const isWorkspaceLevel = entry === CONFIG.WORKING_PROJECT;
+    // 워크스페이스가 열려있는지 확인
+    const hasWorkspace = !!vscode.workspace.workspaceFolders;
+    
+    // 워크스페이스 레벨 설정이고 워크스페이스가 열려있는 경우에만 워크스페이스 스코프 사용
+    return !isWorkspaceLevel || !hasWorkspace;
   }
 
   // set inside VS Code local storage the settings
