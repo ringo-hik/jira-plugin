@@ -43,12 +43,22 @@ export const patchJiraInstance = (jiraInstance: any) => {
       delete options.auth;
       delete options.headers.deleteAuth;
     }
+    // Always ensure SSL verification is disabled for all requests
+    if (options) {
+      options.strictSSL = false;
+      options.rejectUnauthorized = false;
+    }
     return jiraInstance.originalRequestLib(options);
   };
   jiraInstance.requestLib = customRequestLib;
 
   jiraInstance.originalMakeRequest = jiraInstance.makeRequest;
   const customMakeRequest = (options: any, callback: any, successString: any) => {
+    // Always ensure SSL verification is disabled for all requests
+    if (options) {
+      options.strictSSL = false;
+      options.rejectUnauthorized = false;
+    }
     return jiraInstance.originalMakeRequest(options, callback, successString);
   };
   jiraInstance.makeRequest = customMakeRequest;
