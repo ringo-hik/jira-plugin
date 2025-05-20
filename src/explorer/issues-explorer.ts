@@ -158,13 +158,13 @@ export default class IssuesExplorer implements vscode.TreeDataProvider<IssueItem
       } else {
         // used for show loading item in the explorer
         if (store.state.currentSearch.filter === LOADING.text) {
-          return [!!project ? new LoadingItem() : []];
+          return [!!project ? new LoadingItem() : new LoadingItem()];
         }
         // no result
         return [
-          new FilterInfoItem(project, store.state.currentSearch.filter, issues.length),
+          new FilterInfoItem(project || '', store.state.currentSearch.filter, issues.length),
           new DividerItem('------'),
-          new NoResultItem(project),
+          new NoResultItem(project || ''),
         ];
       }
     } else {
