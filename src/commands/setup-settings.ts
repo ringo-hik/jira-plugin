@@ -87,37 +87,10 @@ async function configureConnectionSettings() {
   // Reconnect to Jira
   await store.connectToJira();
   
-  // 서버 버전 호환성 확인 버튼 표시
-  const checkServerButton = 'Check Server Compatibility';
-  const result = await vscode.window.showInformationMessage(
-    'Jira connection settings updated successfully!',
-    checkServerButton
+  // 호환성은 연결 과정에서 자동으로 검증되므로 여기서는 간단한 안내 메시지만 표시
+  vscode.window.showInformationMessage(
+    'Jira 연결 설정이 업데이트되었습니다. 이 확장은 Jira 서버 8.x 버전에서만 작동합니다.'
   );
-  
-  // 사용자가 호환성 확인 버튼을 클릭한 경우
-  if (result === checkServerButton) {
-    try {
-      if (store.state.jira) {
-        const serverInfo = await store.state.jira.getServerInfo();
-        const isCompatible = store.state.jira.isCompatibleServerVersion(serverInfo.version);
-        
-        if (isCompatible) {
-          vscode.window.showInformationMessage(
-            `Server compatibility check passed. Your Jira server version ${serverInfo.version} is compatible.`
-          );
-        } else {
-          vscode.window.showWarningMessage(
-            `Server compatibility check failed. Your Jira server version ${serverInfo.version} is not compatible. ` +
-            `This extension supports Jira Server 8.x and above.`
-          );
-        }
-      } else {
-        vscode.window.showErrorMessage('Cannot check server compatibility. No Jira connection established.');
-      }
-    } catch (error) {
-      vscode.window.showErrorMessage(`Error checking server compatibility: ${error.message || error}`);
-    }
-  }
 }
 
 async function configureProjectSettings() {

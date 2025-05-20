@@ -35,23 +35,31 @@ export default class StoreService {
       
       this.state.jira = new Jira();
       
-      // API 서버 버전 확인 및 호환성 검사
+      // API 서버 버전 확인 및 호환성 검사 - 8.x에서만 작동
       try {
         const serverInfo = await this.state.jira.getServerInfo();
         const isCompatible = this.state.jira.isCompatibleServerVersion(serverInfo.version);
         
         if (!isCompatible) {
-          // 호환되지 않는 서버 버전 경고
-          vscode.window.showWarningMessage(
+          // 호환되지 않는 서버 버전은 오류 발생 및 종료
+          vscode.window.showErrorMessage(
             `이 JIRA 서버 버전(${serverInfo.version})은 이 확장과 호환되지 않습니다. ` +
-            `JIRA 서버 8.x 버전 이상에서만 지원됩니다.`
+            `JIRA 서버 8.x 버전에서만 지원됩니다.`
           );
+          // 연결 중단 - 상태바 초기화
+          statusBar.updateWorkingProjectItem('', true);
+          this.changeStateIssues('', '', []);
+          return; // 더 이상 진행하지 않음
         }
       } catch (versionError) {
-        // 서버 버전 확인 실패 시 경고는 표시하되 계속 진행
-        logger.printErrorMessageInOutput(`서버 버전 확인 실패: ${versionError.message || versionError}`);
+        // 서버 버전 확인 실패 시 오류 표시 및 종료
+        vscode.window.showErrorMessage(`서버 버전 확인 실패: ${versionError.message || versionError}`);
+        statusBar.updateWorkingProjectItem('', true);
+        this.changeStateIssues('', '', []);
+        return; // 더 이상 진행하지 않음
       }
       
+      // 호환 가능한 버전인 경우에만 아래 코드 실행
       // save statuses and projects in the global state
       this.state.statuses = await this.state.jira.getStatuses();
       this.addAdditionalStatuses();

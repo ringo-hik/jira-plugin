@@ -251,16 +251,15 @@ export class Jira implements IJira {
 
   /**
    * 서버 버전 호환성 확인
-   * API 문서에 따라 확인된 Jira Server 버전 요구사항
+   * 명시적으로 Jira Server 8.x 버전에서만 작동하도록 설정
    * @param version 서버 버전
    * @returns 호환성 여부
    */
   isCompatibleServerVersion(version: string): boolean {
     const versionNumbers = this.parseVersionNumbers(version);
     
-    // 특정 서버 버전과 호환되는지 확인 (API_DOCUMENTATION.md 기반)
-    // 현재는 Jira Server 8.x 이상에서만 지원
-    if (versionNumbers.length > 0 && versionNumbers[0] >= 8) {
+    // 메이저 버전이 정확히 8인 경우에만 호환
+    if (versionNumbers.length > 0 && versionNumbers[0] === 8) {
       return true;
     }
     return false;
