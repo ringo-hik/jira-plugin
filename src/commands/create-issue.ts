@@ -4,6 +4,15 @@ import { configuration, issueHelper, logger, selectValues, store } from '../serv
 import { IPickValue } from '../services/configuration.model';
 import { CONFIG } from '../shared/constants';
 
+// Define the interface for issue pick items
+interface IssuePickItem {
+  field: string;
+  label: string;
+  description: string;
+  pickValue?: any;
+  fieldSchema?: any;
+}
+
 export default async function createIssue(issueItem: IssueItem): Promise<void> {
   const project = configuration.get(CONFIG.WORKING_PROJECT);
   if (store.verifyCurrentProject(project)) {
@@ -31,7 +40,7 @@ export default async function createIssue(issueItem: IssueItem): Promise<void> {
           let executeretrieveValues = true;
           while (loopStatus === issueHelper.NEW_ISSUE_STATUS.CONTINUE) {
             // all selector available items
-            const newIssuePicks = [];
+            const newIssuePicks: IssuePickItem[] = [];
             for (const fieldName in issueHelper.issueTypeSelected.fields) {
               // type and project forced before in the payload
               if (fieldName !== 'issuetype' && fieldName !== 'project') {

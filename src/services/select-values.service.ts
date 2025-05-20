@@ -435,12 +435,13 @@ export default class SelectValuesService {
   }
 
   public async changeExplorerGroupBy(): Promise<void> {
-    const picks = [];
-    picks.push({ ...GROUP_BY_FIELDS.STATUS });
-    picks.push({ ...GROUP_BY_FIELDS.ASSIGNEE });
-    picks.push({ ...GROUP_BY_FIELDS.TYPE });
-    picks.push({ ...GROUP_BY_FIELDS.PRIORITY });
-    picks.push({ ...GROUP_BY_FIELDS.UPDATED });
+    const picks = [
+      GROUP_BY_FIELDS.STATUS,
+      GROUP_BY_FIELDS.ASSIGNEE,
+      GROUP_BY_FIELDS.TYPE,
+      GROUP_BY_FIELDS.PRIORITY,
+      GROUP_BY_FIELDS.UPDATED,
+    ];
     const selected = await vscode.window.showQuickPick(picks, {
       placeHolder: `Select Group By field`,
       matchOnDescription: true,

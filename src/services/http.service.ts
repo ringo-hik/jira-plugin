@@ -57,7 +57,7 @@ export class Jira implements IJira {
 
     // Disable all SSL validation for internal networks
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-    
+
     this.jiraInstance = new jiraClient({
       host,
       port,
@@ -65,7 +65,7 @@ export class Jira implements IJira {
       basic_auth: configuration.credentials,
       timeout: configuration.get(CONFIG.REQUESTS_TIMEOUT) * 1000 * 60,
       strictSSL: false, // Always disable SSL validation to support all Jira servers
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
     });
 
     patchJiraInstance(this.jiraInstance);
@@ -119,7 +119,7 @@ export class Jira implements IJira {
     // value is 1000. If you specify a value that is higher than this number, your search results will be
     // truncated.
     const maxResults = ASSIGNEES_MAX_RESULTS;
-    const assignees = [];
+    const assignees: IAssignee[] = [];
     let startAt = 0;
     let goOn = true;
     while (goOn) {
@@ -242,7 +242,7 @@ export class Jira implements IJira {
       const response = await this.customRequest('GET', this.baseUrl + '/rest/api/2/serverInfo');
       return {
         version: response.version,
-        versionNumbers: this.parseVersionNumbers(response.version)
+        versionNumbers: this.parseVersionNumbers(response.version),
       };
     } catch (error) {
       throw new Error(`서버 정보 조회 실패: ${error.message || error}`);
@@ -257,7 +257,7 @@ export class Jira implements IJira {
    */
   isCompatibleServerVersion(version: string): boolean {
     const versionNumbers = this.parseVersionNumbers(version);
-    
+
     // 메이저 버전이 정확히 8인 경우에만 호환
     if (versionNumbers.length > 0 && versionNumbers[0] === 8) {
       return true;
@@ -274,11 +274,12 @@ export class Jira implements IJira {
     if (!version) {
       return [];
     }
-    
+
     try {
-      return version.split('.')
-        .map(part => parseInt(part.replace(/[^0-9]/g, ''), 10))
-        .filter(num => !isNaN(num));
+      return version
+        .split('.')
+        .map((part) => parseInt(part.replace(/[^0-9]/g, ''), 10))
+        .filter((num) => !isNaN(num));
     } catch (e) {
       return [];
     }
