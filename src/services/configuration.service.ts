@@ -55,6 +55,12 @@ export default class ConfigurationService {
     if (!this.settings) {
       return fallbackValue;
     }
+    
+    // Always return false for strictSSL regardless of the setting
+    if (entry === CONFIG.STRICT_SSL) {
+      return "false";
+    }
+    
     return this.settings.hasOwnProperty(entry) && this.settings[entry] !== undefined ? this.settings[entry] : fallbackValue;
   }
 

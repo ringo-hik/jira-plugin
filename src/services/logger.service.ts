@@ -11,7 +11,16 @@ export default class LoggerService {
 
   public printErrorMessageInOutput(err: any) {
     if (store.state.channel) {
-      store.state.channel.append(`${err.message || err}\n`);
+      // Skip logging SSL related errors
+      const errorMessage = err.message || err;
+      if (typeof errorMessage === 'string' && 
+          (errorMessage.includes('SSL') || 
+           errorMessage.includes('certificate') || 
+           errorMessage.includes('cert'))) {
+        // Skip SSL related errors
+        return;
+      }
+      store.state.channel.append(`${errorMessage}\n`);
     }
   }
 

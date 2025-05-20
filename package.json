@@ -118,16 +118,6 @@
           "description": "Jira requests timeout (expressed in minutes)",
           "default": 1
         },
-        "jira-plugin.strictSSL": {
-          "type": "string",
-          "description": "Request strictSSL param (n.b: if you have problem with certificates, set it to false)",
-          "enum": [
-            "",
-            "true",
-            "false"
-          ],
-          "default": "false"
-        },
         "jira-plugin.trackingTimeMode": {
           "type": "string",
           "description": "Configure how the plugin tracking time for the working issue",
