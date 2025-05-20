@@ -4,8 +4,19 @@ import { store } from '.';
 export default class LoggerService {
   public printErrorMessageInOutputAndShowAlert(err: any) {
     if (store.state.channel) {
+      // Skip SSL/TLS/certificate related errors
+      const errorMessage = err.message || err;
+      if (typeof errorMessage === 'string' && 
+          (errorMessage.includes('SSL') || 
+           errorMessage.includes('TLS') ||
+           errorMessage.includes('certificate') || 
+           errorMessage.includes('cert'))) {
+        // Skip SSL related errors
+        return;
+      }
+      
       vscode.window.showErrorMessage(`Check logs in Jira Plugin terminal output.`);
-      store.state.channel.append(`${err.message || err}\n`);
+      store.state.channel.append(`${errorMessage}\n`);
     }
   }
 

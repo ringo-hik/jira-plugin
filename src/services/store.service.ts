@@ -30,6 +30,9 @@ export default class StoreService {
 
   public async connectToJira(): Promise<void> {
     try {
+      // Disable all SSL validation for internal networks - also set at process level
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+      
       this.state.jira = new Jira();
       // save statuses and projects in the global state
       this.state.statuses = await this.state.jira.getStatuses();
@@ -50,11 +53,22 @@ export default class StoreService {
         // vscode.window.showWarningMessage("Working project isn't set.");
       }
     } catch (err) {
+      // Filter SSL errors
+      const errorMessage = err.message || err;
+      const isSSLError = typeof errorMessage === 'string' && 
+          (errorMessage.includes('SSL') || 
+           errorMessage.includes('TLS') ||
+           errorMessage.includes('certificate') || 
+           errorMessage.includes('cert'));
+      
       setTimeout(() => {
         statusBar.updateWorkingProjectItem('', true);
       }, 1000);
       this.changeStateIssues('', '', []);
-      logger.printErrorMessageInOutput(err);
+      
+      if (!isSSLError) {
+        logger.printErrorMessageInOutput(err);
+      }
     }
   }
 

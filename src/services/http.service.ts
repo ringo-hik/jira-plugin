@@ -54,6 +54,9 @@ export class Jira implements IJira {
       host = host.substring(0, portPosition);
     }
 
+    // Disable all SSL validation for internal networks
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    
     this.jiraInstance = new jiraClient({
       host,
       port,
@@ -61,6 +64,7 @@ export class Jira implements IJira {
       basic_auth: configuration.credentials,
       timeout: configuration.get(CONFIG.REQUESTS_TIMEOUT) * 1000 * 60,
       strictSSL: false, // Always disable SSL validation to support all Jira servers
+      rejectUnauthorized: false
     });
 
     patchJiraInstance(this.jiraInstance);
