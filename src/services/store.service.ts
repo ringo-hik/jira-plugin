@@ -34,6 +34,24 @@ export default class StoreService {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
       
       this.state.jira = new Jira();
+      
+      // API 서버 버전 확인 및 호환성 검사
+      try {
+        const serverInfo = await this.state.jira.getServerInfo();
+        const isCompatible = this.state.jira.isCompatibleServerVersion(serverInfo.version);
+        
+        if (!isCompatible) {
+          // 호환되지 않는 서버 버전 경고
+          vscode.window.showWarningMessage(
+            `이 JIRA 서버 버전(${serverInfo.version})은 이 확장과 호환되지 않습니다. ` +
+            `JIRA 서버 8.x 버전 이상에서만 지원됩니다.`
+          );
+        }
+      } catch (versionError) {
+        // 서버 버전 확인 실패 시 경고는 표시하되 계속 진행
+        logger.printErrorMessageInOutput(`서버 버전 확인 실패: ${versionError.message || versionError}`);
+      }
+      
       // save statuses and projects in the global state
       this.state.statuses = await this.state.jira.getStatuses();
       this.addAdditionalStatuses();

@@ -23,6 +23,8 @@ export interface IJira {
   getNotifications(lastId: string): Promise<INotifications>;
   markNotificationsAsReadUnread(payload: IMarkNotificationAsReadUnread): Promise<any>;
   getSprints(): Promise<{ allMatches: any[]; suggestions: ISprint[] }>;
+  getServerInfo(): Promise<IServerInfo>;
+  isCompatibleServerVersion(version: string): boolean;
 }
 
 export interface IServerInfo {

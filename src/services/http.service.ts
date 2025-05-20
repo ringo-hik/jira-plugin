@@ -20,6 +20,7 @@ import {
   IPriority,
   IProject,
   ISearch,
+  IServerInfo,
   ISetTransition,
   ISprint,
   IStatus,
@@ -230,5 +231,57 @@ export class Jira implements IJira {
 
   async getSprints(): Promise<{ allMatches: any[]; suggestions: ISprint[] }> {
     return await this.customRequest('GET', this.baseUrl + '/rest/greenhopper/1.0/sprint/picker');
+  }
+
+  /**
+   * 서버 정보 조회 - 서버 버전 확인을 위해 추가
+   * @returns 서버 정보
+   */
+  async getServerInfo(): Promise<IServerInfo> {
+    try {
+      const response = await this.customRequest('GET', this.baseUrl + '/rest/api/2/serverInfo');
+      return {
+        version: response.version,
+        versionNumbers: this.parseVersionNumbers(response.version)
+      };
+    } catch (error) {
+      throw new Error(`서버 정보 조회 실패: ${error.message || error}`);
+    }
+  }
+
+  /**
+   * 서버 버전 호환성 확인
+   * API 문서에 따라 확인된 Jira Server 버전 요구사항
+   * @param version 서버 버전
+   * @returns 호환성 여부
+   */
+  isCompatibleServerVersion(version: string): boolean {
+    const versionNumbers = this.parseVersionNumbers(version);
+    
+    // 특정 서버 버전과 호환되는지 확인 (API_DOCUMENTATION.md 기반)
+    // 현재는 Jira Server 8.x 이상에서만 지원
+    if (versionNumbers.length > 0 && versionNumbers[0] >= 8) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * 버전 문자열을 숫자 배열로 파싱
+   * @param version 버전 문자열 (예: "8.13.5")
+   * @returns 버전 숫자 배열 (예: [8, 13, 5])
+   */
+  private parseVersionNumbers(version: string): number[] {
+    if (!version) {
+      return [];
+    }
+    
+    try {
+      return version.split('.')
+        .map(part => parseInt(part.replace(/[^0-9]/g, ''), 10))
+        .filter(num => !isNaN(num));
+    } catch (e) {
+      return [];
+    }
   }
 }
