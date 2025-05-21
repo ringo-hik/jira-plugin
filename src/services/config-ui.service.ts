@@ -8,6 +8,9 @@ import { configuration } from '.';
 import { ConfigGroup, IConfigMetadata } from './configuration.model';
 import { getConfigMetadataByGroup } from '../shared/config-metadata';
 
+// 기본 설정 관련 상수
+const BASIC_SETTINGS_ONLY = true; // 기본 설정만 사용
+
 /**
  * 설정 UI 서비스
  */
@@ -18,18 +21,29 @@ export class ConfigUIService {
    * @returns 설정 완료 여부
    */
   public async showGroupSettings(group: ConfigGroup): Promise<boolean> {
-    const configItems = getConfigMetadataByGroup(group);
-    const results = await this.collectSettingsFromUser(configItems);
+    // 기본 설정 그룹만 표시
+    if (BASIC_SETTINGS_ONLY && group !== ConfigGroup.CONNECTION && group !== ConfigGroup.PROJECT) {
+      // 기본 연결/프로젝트 그룹이 아닌 경우 이미 설정됨으로 처리
+      return true;
+    }
     
+    const configItems = getConfigMetadataByGroup(group);
+    if (configItems.length === 0) {
+      // 그룹에 설정 항목이 없으면 이미 설정됨으로 처리
+      return true;
+    }
+    
+    const results = await this.collectSettingsFromUser(configItems);
+
     if (results === null) {
       return false; // 사용자가 취소함
     }
-    
+
     // 수집된 설정값 저장
     await this.saveSettings(results);
     return true;
   }
-  
+
   /**
    * 단일 설정 항목에 대한 UI 표시
    * @param configItem 설정 메타데이터
@@ -37,27 +51,27 @@ export class ConfigUIService {
    */
   public async showSingleSetting(configItem: IConfigMetadata): Promise<any | undefined> {
     const currentValue = configuration.get(configItem.key, configItem.defaultValue);
-    
+
     // 설정 유형에 따른 UI 분기
-    switch(configItem.type) {
+    switch (configItem.type) {
       case 'boolean':
         return this.showBooleanSetting(configItem, !!currentValue);
-        
+
       case 'enum':
         return this.showEnumSetting(configItem, currentValue);
-        
+
       case 'number':
         return this.showNumberSetting(configItem, currentValue);
-        
+
       case 'password':
         return this.showPasswordSetting(configItem);
-        
+
       case 'string':
       default:
         return this.showStringSetting(configItem, currentValue);
     }
   }
-  
+
   /**
    * 여러 설정 항목에 대한 값 수집
    * @param configItems 설정 메타데이터 배열
@@ -65,10 +79,10 @@ export class ConfigUIService {
    */
   private async collectSettingsFromUser(configItems: IConfigMetadata[]): Promise<Record<string, any> | null> {
     const results: Record<string, any> = {};
-    
+
     for (const item of configItems) {
       const value = await this.showSingleSetting(item);
-      
+
       // 사용자가 취소한 경우
       if (value === undefined) {
         if (item.required) {
@@ -76,13 +90,13 @@ export class ConfigUIService {
         }
         continue; // 선택 항목이면 다음으로
       }
-      
+
       results[item.key] = value;
     }
-    
+
     return results;
   }
-  
+
   /**
    * 수집된 설정값 저장
    * @param settings 설정 키-값 쌍 객체
@@ -92,7 +106,7 @@ export class ConfigUIService {
       await configuration.set(key, value);
     }
   }
-  
+
   /**
    * 문자열 설정 UI 표시
    */
@@ -101,12 +115,10 @@ export class ConfigUIService {
       prompt: configItem.description || configItem.displayName,
       placeHolder: configItem.placeholder || '',
       value: currentValue,
-      validateInput: configItem.validator ? 
-        (value) => configItem.validator!(value) ? null : '유효하지 않은 값입니다.' : 
-        undefined
+      validateInput: configItem.validator ? (value) => (configItem.validator!(value) ? null : '유효하지 않은 값입니다.') : undefined,
     });
   }
-  
+
   /**
    * 숫자 설정 UI 표시
    */
@@ -121,12 +133,12 @@ export class ConfigUIService {
           return '숫자를 입력해주세요.';
         }
         return null;
-      }
+      },
     });
-    
+
     return result !== undefined ? Number(result) : undefined;
   }
-  
+
   /**
    * 비밀번호 설정 UI 표시
    */
@@ -134,10 +146,10 @@ export class ConfigUIService {
     return vscode.window.showInputBox({
       prompt: configItem.description || configItem.displayName,
       placeHolder: configItem.placeholder || '',
-      password: true
+      password: true,
     });
   }
-  
+
   /**
    * 불리언 설정 UI 표시
    */
@@ -145,14 +157,14 @@ export class ConfigUIService {
     const result = await vscode.window.showQuickPick(
       [
         { label: '활성화', description: '기능 활성화', picked: currentValue },
-        { label: '비활성화', description: '기능 비활성화', picked: !currentValue }
+        { label: '비활성화', description: '기능 비활성화', picked: !currentValue },
       ],
       { placeHolder: configItem.description || configItem.displayName }
     );
-    
+
     return result ? result.label === '활성화' : undefined;
   }
-  
+
   /**
    * 열거형 설정 UI 표시
    */
@@ -160,18 +172,15 @@ export class ConfigUIService {
     if (!configItem.options || configItem.options.length === 0) {
       return this.showStringSetting(configItem, currentValue);
     }
-    
-    const options = configItem.options.map(opt => ({
+
+    const options = configItem.options.map((opt) => ({
       label: opt.label,
       description: opt.description,
-      picked: opt.label === currentValue
+      picked: opt.label === currentValue,
     }));
-    
-    const result = await vscode.window.showQuickPick(
-      options,
-      { placeHolder: configItem.description || configItem.displayName }
-    );
-    
+
+    const result = await vscode.window.showQuickPick(options, { placeHolder: configItem.description || configItem.displayName });
+
     return result ? result.label : undefined;
   }
 }
