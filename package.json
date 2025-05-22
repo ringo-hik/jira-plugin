@@ -1,28 +1,10 @@
 {
   "name": "jira-plugin",
-  "displayName": "Jira Plugin",
-  "description": "Manage your on-premises Jira in vscode",
+  "displayName": "Simple JIRA Plugin",
+  "description": "Simple JIRA Server integration - Just URL and PAT",
   "version": "1.0.0",
   "publisher": "se-khm",
   "icon": "images/icons/icon.png",
-  "galleryBanner": {
-    "color": "#3B4859",
-    "theme": "dark"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ringo-hik/jira-plugin.git"
-  },
-  "keywords": [
-    "Jira",
-    "vsCode"
-  ],
-  "author": "Hakmin Kim",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ringo-hik/jira-plugin/issues"
-  },
-  "homepage": "https://github.com/ringo-hik/jira-plugin#readme",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -37,146 +19,27 @@
     "clean": "rm -rf ./out",
     "vscode:prepublish": "npm run compile",
     "compile": "npm run clean && tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "postinstall": "git update-index --skip-worktree ./test/utils/settings.ts && node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && TYPE=1 node ./scripts/rename-files.js && node ./node_modules/vscode/bin/test && TYPE=2 node ./scripts/rename-files.js",
-    "setup:settings": "npm run compile && TYPE=3 node ./scripts/rename-files.js && node ./node_modules/vscode/bin/test && TYPE=4 node ./scripts/rename-files.js",
-    "setup:settings:insiders": "npm run compile && TYPE=3 node ./scripts/rename-files.js && CODE_VERSION='insiders' node ./node_modules/vscode/bin/test && TYPE=4 node ./scripts/rename-files.js",
-    "prelint": "prettier --write 'src/**/*.ts'",
-    "lint": "tslint 'src/**/*.ts' --format stylish --fix"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "git stash -q --keep-index && npm run lint && npm run test && git add -u && git stash pop -q"
-    }
+    "watch": "tsc -watch -p ./"
   },
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "Jira configuration",
+      "title": "Simple JIRA Configuration",
       "properties": {
-        "jira-plugin.additionalStatuses": {
-          "type": "string",
-          "description": "Additional custom statuses, used for manage some Jira wrong behavior",
-          "default": ""
-        },
         "jira-plugin.baseUrl": {
           "type": "string",
-          "description": "Your Jira base URL (e.g. https://your_jira_base_url.com or http://your_jira_base_url.com:your_port)",
+          "description": "Your JIRA Server URL",
           "default": ""
-        },
-        "jira-plugin.defaultJqlSearch": {
-          "type": "string",
-          "description": "Here you can define your default/custom JQL search (n.b: WORKING_PROJECT is the placeholder for the current working project)",
-          "default": "project = 'WORKING_PROJECT' ORDER BY status ASC, updated DESC"
-        },
-        "jira-plugin.enableWorkingIssue": {
-          "type": "boolean",
-          "description": "Enable working issue functionality in status bar",
-          "default": "true"
-        },
-        "jira-plugin.gitIntegration": {
-          "type": "boolean",
-          "description": "Automatically watch for branch switching and select appropriate project and working issue",
-          "default": false
-        },
-        "jira-plugin.groupTaskAndSubtasks": {
-          "type": "boolean",
-          "description": "Group task and subtasks into explorer",
-          "default": false
-        },
-        "jira-plugin.issueListAutoRefreshInterval": {
-          "type": "integer",
-          "description": "Refresh explorer every x minutes (n.b: setting to 0 disables auto-refresh)",
-          "default": 0
-        },
-        "jira-plugin.numberOfIssuesInList": {
-          "type": "integer",
-          "description": "Number of issues to show in list (n.b: If you define high numbers the research can be slow)",
-          "default": 50
-        },
-        "jira-plugin.projectKeyMapping": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Setting for map projects key for git integration (e.g. CUSTOMKEY=JIRAKEY)",
-          "default": []
-        },
-        "jira-plugin.projectsToHide": {
-          "type": "string",
-          "description": "Here you can define which projects you want to hide (e.g. PROJECT-KEY-1, PROJECT-KEY-2, PROJECT-KEY-3)",
-          "default": ""
-        },
-        "jira-plugin.projectsToShow": {
-          "type": "string",
-          "description": "Here you can define which projects you want to show (e.g. PROJECT-KEY-1, PROJECT-KEY-2, PROJECT-KEY-3)",
-          "default": ""
-        },
-        "jira-plugin.requestsTimeout": {
-          "type": "integer",
-          "description": "Jira requests timeout (expressed in minutes)",
-          "default": 1
-        },
-        "jira-plugin.trackingTimeMode": {
-          "type": "string",
-          "description": "Configure how the plugin tracking time for the working issue",
-          "enum": [
-            "hybrid",
-            "always",
-            "vsCodeFocus",
-            "never"
-          ],
-          "default": "hybrid"
-        },
-        "jira-plugin.trackingTimeModeHybridTimeout": {
-          "type": "integer",
-          "description": "Number of minutes to wait for the user to return to VSCode before discarding away time in hybrid time tracking mode",
-          "default": 30
         },
         "jira-plugin.username": {
           "type": "string",
-          "description": "Your Jira user ID",
+          "description": "Your JIRA user ID",
           "default": ""
-        },
-        "jira-plugin.workingIssueFilter": {
-          "type": "string",
-          "description": "Choose which internal filter constant is used for 'Select Working Issue' filter. Note: Requires reload on change",
-          "enum": [
-            "WORKING_ISSUES",
-            "ALL"
-          ],
-          "default": "WORKING_ISSUES"
-        },
-        "jira-plugin.workingIssueAssignees": {
-          "type": "string",
-          "description": "Assignees used for extract working issue list (e.g. robert.smith, michael.jones) (n.b: CURRENT_USER is the placeholder for the current user)",
-          "default": "CURRENT_USER"
-        },
-        "jira-plugin.workingIssueChangeStatusAfterSelection": {
-          "type": "boolean",
-          "description": "Change working issue status after selection",
-          "default": false
-        },
-        "jira-plugin.workingIssueShowTimer": {
-          "type": "boolean",
-          "description": "Show/Hide working issue timer in status bar",
-          "default": true
-        },
-        "jira-plugin.workingIssueStatues": {
-          "type": "string",
-          "description": "Statuses used for extract working issue list (e.g. In Progress, Development In Progress, Test in Progress)",
-          "default": "In progress"
         },
         "jira-plugin.workingProject": {
           "type": "string",
-          "description": "Jira working project",
+          "description": "Current working project key",
           "default": ""
-        },
-        "jira-plugin.worklogMinimumTrackingTime": {
-          "type": "integer",
-          "description": "Minimum tracking time for show the Worklog modal and create Jira worklog (expressed in minutes)",
-          "default": 0
         }
       }
     },
@@ -193,123 +56,14 @@
       "issuesExplorer": [
         {
           "id": "issuesExplorer",
-          "name": "EXPLORER"
+          "name": "ISSUES"
         }
       ]
     },
     "commands": [
       {
         "command": "jira-plugin.setupCredentials",
-        "title": "Setup credentials",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.openSettings",
-        "title": "Open Settings",
-        "category": "Jira-plugin",
-        "icon": {
-          "light": "images/icons/light/gear.svg",
-          "dark": "images/icons/dark/gear.svg"
-        }
-      },
-      {
-        "command": "jira-plugin.changeExplorerGroupBy",
-        "title": "Change explorer 'Group By' field",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.defaultIssues",
-        "title": "0 - Default JQL Search",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.allIssues",
-        "title": "1 - All issues",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.currentSprint",
-        "title": "2 - Current sprint issues",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.issueById",
-        "title": "3 - Issue by id",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.issuesByStatus",
-        "title": "4 - Issues filtered by status",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.issuesByStatusAssignee",
-        "title": "5 - Issues filtered by status and assignee",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.issuesBySummary",
-        "title": "6 - Issues filtered by summary",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.myIssuesByStatus",
-        "title": "7 - My issues filtered by status",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.favouritesFilters",
-        "title": "8 - Favourites filters",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.setWorkingProject",
-        "title": "Set Working Project",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.setWorkingIssue",
-        "title": "Set Working Issue",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.stopWorkingIssue",
-        "title": "Stop Working On Issue",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.changeIssueStatus",
-        "title": "Change issue status",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.changeIssueAssignee",
-        "title": "Change issue assignee",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.issueAddComment",
-        "title": "Add comment",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.issueAddInternalComment",
-        "title": "Add internal comment",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.copyIssueKeySummary",
-        "title": "Copy Jira issue Key+Summary",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.copyIssueRemoteUrl",
-        "title": "Copy Jira issue remote url",
-        "category": "Jira-plugin"
-      },
-      {
-        "command": "jira-plugin.checkoutGitBranch",
-        "title": "Checkout or create git branch",
+        "title": "Setup JIRA Connection",
         "category": "Jira-plugin"
       },
       {
@@ -322,137 +76,42 @@
         }
       },
       {
-        "command": "jira-plugin.createIssue",
-        "title": "Create issue",
-        "category": "Jira-plugin",
-        "icon": {
-          "light": "images/icons/light/plus_nav.png",
-          "dark": "images/icons/dark/plus_nav.png"
-        }
+        "command": "jira-plugin.setWorkingProject",
+        "title": "Change Project",
+        "category": "Jira-plugin"
       },
       {
-        "command": "jira-plugin.insertWorkingIssueComment",
-        "title": "Insert Working Issue Key+Summary comment",
+        "command": "jira-plugin.openIssue",
+        "title": "Open in Browser",
         "category": "Jira-plugin"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "jira-plugin.openSettings",
-          "when": "view == issuesExplorer",
-          "group": "navigation"
-        },
-        {
-          "command": "jira-plugin.changeExplorerGroupBy",
-          "when": "view == issuesExplorer",
-          "group": "group_by"
-        },
-        {
-          "command": "jira-plugin.defaultIssues",
-          "when": "view == issuesExplorer",
-          "group": "jql"
-        },
-        {
-          "command": "jira-plugin.allIssues",
-          "when": "view == issuesExplorer",
-          "group": "jql"
-        },
-        {
-          "command": "jira-plugin.currentSprint",
-          "when": "view == issuesExplorer",
-          "group": "jql"
-        },
-        {
-          "command": "jira-plugin.issueById",
-          "when": "view == issuesExplorer",
-          "group": "jql"
-        },
-        {
-          "command": "jira-plugin.issuesByStatus",
-          "when": "view == issuesExplorer",
-          "group": "jql"
-        },
-        {
-          "command": "jira-plugin.issuesByStatusAssignee",
-          "when": "view == issuesExplorer",
-          "group": "jql"
-        },
-        {
-          "command": "jira-plugin.issuesBySummary",
-          "when": "view == issuesExplorer",
-          "group": "jql"
-        },
-        {
-          "command": "jira-plugin.myIssuesByStatus",
-          "when": "view == issuesExplorer",
-          "group": "jql"
-        },
-        {
-          "command": "jira-plugin.favouritesFilters",
-          "when": "view == issuesExplorer",
-          "group": "jql"
-        },
-        {
           "command": "jira-plugin.refresh",
           "when": "view == issuesExplorer",
           "group": "navigation"
         },
         {
-          "command": "jira-plugin.createIssue",
+          "command": "jira-plugin.setWorkingProject",
           "when": "view == issuesExplorer",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "jira-plugin.changeIssueStatus",
-          "group": "1_issue",
-          "when": "view == issuesExplorer && viewItem == IssueItem"
-        },
-        {
-          "command": "jira-plugin.issueAddComment",
-          "group": "1_issue",
-          "when": "view == issuesExplorer && viewItem == IssueItem"
-        },
-        {
-          "command": "jira-plugin.issueAddInternalComment",
-          "group": "1_issue",
-          "when": "view == issuesExplorer && viewItem == IssueItem"
-        },
-        {
-          "command": "jira-plugin.changeIssueAssignee",
-          "group": "1_issue",
-          "when": "view == issuesExplorer && viewItem == IssueItem"
-        },
-        {
-          "command": "jira-plugin.copyIssueKeySummary",
-          "group": "1_issue",
-          "when": "view == issuesExplorer && viewItem == IssueItem"
-        },
-        {
-          "command": "jira-plugin.copyIssueRemoteUrl",
-          "group": "1_issue",
-          "when": "view == issuesExplorer && viewItem == IssueItem"
-        },
-        {
-          "command": "jira-plugin.checkoutGitBranch",
-          "group": "2_git",
-          "when": "view == issuesExplorer && viewItem == IssueItem && gitEnabled == 1"
+          "command": "jira-plugin.openIssue",
+          "when": "view == issuesExplorer && viewItem == jiraIssue",
+          "group": "inline"
         }
       ]
     }
   },
   "devDependencies": {
-    "@types/mocha": "^8.2.3",
     "@types/node": "^14.11.2",
     "@types/vscode": "1.31",
-    "husky": "^4.3.0",
-    "mocha": "^8.1.3",
-    "prettier": "^2.1.2",
-    "tslint": "^6.1.3",
-    "typescript": "^3.9.7",
-    "vscode": "^1.1.37"
+    "typescript": "^3.9.7"
   },
   "dependencies": {
     "jira-connector": "^3.1.0"

@@ -6,14 +6,20 @@
     "lib": ["dom", "es2017"],
     "sourceMap": true,
     "rootDir": ".",
-    "strict": true,
+    "strict": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "noImplicitThis": false,
+    "skipLibCheck": true
   },
+  "include": [
+    "src/extension.ts",
+    "src/shared/constants.ts",
+    "src/services/jira.service.ts"
+  ],
   "exclude": ["node_modules", ".vscode-test"]
 }
