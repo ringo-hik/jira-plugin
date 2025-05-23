@@ -100,7 +100,17 @@ export class IssuesExplorer implements vscode.TreeDataProvider<IssueItem> {
     if (!element) {
       // Root level - show projects
       if (this.projects.length === 0) {
-        return [new IssueItem('No projects added. Use "Add Project" button', vscode.TreeItemCollapsibleState.None)];
+        const welcomeItems = [
+          new IssueItem('🎉 JIRA Connected Successfully!', vscode.TreeItemCollapsibleState.None),
+          new IssueItem('', vscode.TreeItemCollapsibleState.None),
+          new IssueItem('📌 Get Started:', vscode.TreeItemCollapsibleState.None),
+          new IssueItem('   1. Click the "+" button above to add a project', vscode.TreeItemCollapsibleState.None),
+          new IssueItem('   2. Enter your project key (e.g., PROJ)', vscode.TreeItemCollapsibleState.None),
+          new IssueItem('   3. Browse issues and click to open in browser', vscode.TreeItemCollapsibleState.None),
+          new IssueItem('', vscode.TreeItemCollapsibleState.None),
+          new IssueItem('💡 Tip: Add multiple projects to monitor them all!', vscode.TreeItemCollapsibleState.None)
+        ];
+        return welcomeItems;
       }
       
       return this.projects.map(project => 

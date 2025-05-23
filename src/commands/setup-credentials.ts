@@ -72,7 +72,16 @@ export default async function setupCredentials(): Promise<void> {
     try {
       await jira.initialize();
       issuesExplorer.refresh();
-      vscode.window.showInformationMessage('JIRA connection successful!');
+      
+      const result = await vscode.window.showInformationMessage(
+        'JIRA connection successful! Would you like to add a project now?',
+        'Yes',
+        'Later'
+      );
+      
+      if (result === 'Yes') {
+        vscode.commands.executeCommand('jira-plugin.addProject');
+      }
     } catch (error) {
       throw new Error(`Connection failed: ${error.message}`);
     }
