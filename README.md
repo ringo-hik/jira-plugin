@@ -18,7 +18,9 @@ A simple VS Code extension for viewing JIRA issues and opening them in your brow
 3. Click "Setup JIRA Connection"
 4. Enter your JIRA server URL (e.g., https://jira.company.com)
 5. Enter your username/email
-6. Enter your Personal Access Token (PAT)
+6. Enter your authentication token:
+   - **Atlassian Cloud**: Use API token (create at https://id.atlassian.com/manage/api-tokens)
+   - **JIRA Server/Data Center**: Use password or Personal Access Token
 
 ## Usage
 
