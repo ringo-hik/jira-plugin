@@ -61,7 +61,12 @@ export class IssuesExplorer implements vscode.TreeDataProvider<IssueItem> {
 
   async getChildren(element?: IssueItem): Promise<IssueItem[]> {
     if (!jira.isInitialized()) {
-      return [new IssueItem('Click here to setup JIRA credentials', vscode.TreeItemCollapsibleState.None)];
+      const setupItem = new IssueItem('Click here to setup JIRA credentials', vscode.TreeItemCollapsibleState.None);
+      setupItem.command = {
+        command: 'jira-plugin.setupCredentials',
+        title: 'Setup JIRA Connection'
+      };
+      return [setupItem];
     }
 
     // Search mode
