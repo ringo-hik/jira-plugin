@@ -64,7 +64,8 @@
       {
         "command": "jira-plugin.openSettings",
         "title": "Open Settings",
-        "category": "JIRA"
+        "category": "JIRA",
+        "icon": "$(gear)"
       },
       {
         "command": "jira-plugin.refresh",
@@ -93,10 +94,7 @@
         "command": "jira-plugin.searchIssues",
         "title": "Search Issues",
         "category": "JIRA",
-        "icon": {
-          "light": "images/icons/light/gear.svg",
-          "dark": "images/icons/dark/gear.svg"
-        }
+        "icon": "$(search)"
       }
     ],
     "menus": {
@@ -115,6 +113,11 @@
           "command": "jira-plugin.refresh",
           "when": "view == issuesExplorer",
           "group": "navigation@3"
+        },
+        {
+          "command": "jira-plugin.openSettings",
+          "when": "view == issuesExplorer",
+          "group": "2_settings"
         }
       ],
       "view/item/context": [
