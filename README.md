@@ -30,7 +30,16 @@ A simple VS Code extension for viewing JIRA issues and opening them in your brow
 ## Requirements
 
 - VS Code 1.74.0 or higher
+- JIRA Server/Data Center 7.0 or higher
+- JIRA Cloud (all versions)
 - Valid JIRA server URL and PAT token
+
+## Supported JIRA Versions
+
+- **JIRA Server**: 7.0+, 8.x, 9.x
+- **JIRA Data Center**: 7.0+, 8.x, 9.x
+- **JIRA Cloud**: All versions
+- Uses REST API v2 for maximum compatibility
 
 ## Simple and Clean
 
