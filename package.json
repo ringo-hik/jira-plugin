@@ -1,8 +1,8 @@
 {
   "name": "jira-plugin",
-  "displayName": "Simple JIRA Plugin",
-  "description": "Simple JIRA Server integration - Just URL and PAT",
-  "version": "1.0.0",
+  "displayName": "JIRA Remote Control",
+  "description": "Simple JIRA issue viewer and browser launcher",
+  "version": "2.0.0",
   "publisher": "se-khm",
   "icon": "images/icons/icon.png",
   "engines": {
@@ -24,21 +24,16 @@
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "Simple JIRA Configuration",
+      "title": "JIRA Plugin Configuration",
       "properties": {
         "jira-plugin.baseUrl": {
           "type": "string",
-          "description": "Your JIRA Server URL",
+          "description": "Your JIRA Server URL (e.g., https://jira.company.com)",
           "default": ""
         },
         "jira-plugin.username": {
           "type": "string",
-          "description": "Your JIRA user ID",
-          "default": ""
-        },
-        "jira-plugin.workingProject": {
-          "type": "string",
-          "description": "Current working project key",
+          "description": "Your JIRA username or email",
           "default": ""
         }
       }
@@ -47,7 +42,7 @@
       "activitybar": [
         {
           "id": "issuesExplorer",
-          "title": "Jira",
+          "title": "JIRA",
           "icon": "images/icons/jira-explorer-icon.svg"
         }
       ]
@@ -56,7 +51,7 @@
       "issuesExplorer": [
         {
           "id": "issuesExplorer",
-          "name": "ISSUES"
+          "name": "Projects"
         }
       ]
     },
@@ -64,56 +59,78 @@
       {
         "command": "jira-plugin.setupCredentials",
         "title": "Setup JIRA Connection",
-        "category": "Jira-plugin"
+        "category": "JIRA"
+      },
+      {
+        "command": "jira-plugin.openSettings",
+        "title": "Open Settings",
+        "category": "JIRA"
       },
       {
         "command": "jira-plugin.refresh",
         "title": "Refresh",
-        "category": "Jira-plugin",
+        "category": "JIRA",
         "icon": {
           "light": "images/icons/light/refresh.svg",
           "dark": "images/icons/dark/refresh.svg"
         }
       },
       {
-        "command": "jira-plugin.setWorkingProject",
-        "title": "Change Project",
-        "category": "Jira-plugin"
+        "command": "jira-plugin.addProject",
+        "title": "Add Project",
+        "category": "JIRA",
+        "icon": {
+          "light": "images/icons/light/plus_nav.png",
+          "dark": "images/icons/dark/plus_nav.png"
+        }
       },
       {
         "command": "jira-plugin.openIssue",
         "title": "Open in Browser",
-        "category": "Jira-plugin"
+        "category": "JIRA"
+      },
+      {
+        "command": "jira-plugin.searchIssues",
+        "title": "Search Issues",
+        "category": "JIRA",
+        "icon": {
+          "light": "images/icons/light/gear.svg",
+          "dark": "images/icons/dark/gear.svg"
+        }
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "jira-plugin.refresh",
+          "command": "jira-plugin.addProject",
           "when": "view == issuesExplorer",
-          "group": "navigation"
+          "group": "navigation@1"
         },
         {
-          "command": "jira-plugin.setWorkingProject",
+          "command": "jira-plugin.searchIssues",
           "when": "view == issuesExplorer",
-          "group": "navigation"
+          "group": "navigation@2"
+        },
+        {
+          "command": "jira-plugin.refresh",
+          "when": "view == issuesExplorer",
+          "group": "navigation@3"
         }
       ],
       "view/item/context": [
         {
           "command": "jira-plugin.openIssue",
-          "when": "view == issuesExplorer && viewItem == jiraIssue",
-          "group": "inline"
+          "when": "view == issuesExplorer && viewItem == issue"
         }
       ]
     }
   },
   "devDependencies": {
     "@types/node": "^14.11.2",
-    "@types/vscode": "1.31",
-    "typescript": "^3.9.7"
+    "@types/vscode": "^1.74.0",
+    "typescript": "^4.5.0"
   },
   "dependencies": {
-    "jira-connector": "^3.1.0"
+    "axios": "^1.3.0"
   }
 }

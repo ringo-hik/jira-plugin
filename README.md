@@ -1,126 +1,43 @@
-# Jira 플러그인 사용 가이드
+# JIRA Remote Control
 
-## 개요
+A simple VS Code extension for viewing JIRA issues and opening them in your browser.
 
-이 플러그인은 VS Code에서 직접 Jira를 관리할 수 있게 해주는 도구입니다. 이슈 조회, 생성, 수정 등 Jira의 주요 기능을 VS Code 안에서 사용할 수 있습니다.
+## Features
 
-## 주요 기능
+- Connect to JIRA using URL and Personal Access Token (PAT)
+- Add multiple projects to monitor
+- View recent 50 issues per project
+- View your assigned issues per project
+- Click to open issues directly in browser
+- Clean tree view interface
 
-- Jira 이슈 조회 및 필터링
-- 새 이슈 생성
-- 이슈 상태 변경
-- 이슈 담당자 변경
-- 이슈에 코멘트 추가
-- 작업 중인 이슈 시간 추적
-- Git 브랜치 연동
-- 그 외 다양한 기능
+## Setup
 
-## 설치 방법
+1. Install the extension
+2. Click on the JIRA icon in the activity bar
+3. Click "Setup JIRA Connection"
+4. Enter your JIRA server URL (e.g., https://jira.company.com)
+5. Enter your username/email
+6. Enter your Personal Access Token (PAT)
 
-### 1. Solution Marketplace를 통한 설치
+## Usage
 
-1. VS Code 왼쪽 사이드바에서 확장(Extensions) 아이콘을 클릭합니다.
-2. 검색창에 "Jira Plugin"을 입력합니다.
-3. "Jira Plugin" (퍼블리셔: se-khm)을 찾아 "설치" 버튼을 클릭합니다.
+- Click the "+" button to add a project (enter project key like "PROJ")
+- Expand projects to see "Recent Issues" and "My Issues"
+- Click on any issue to open it in your browser
+- Use refresh button to update issue lists
 
-### 2. VSIX 파일을 통한 설치
+## Requirements
 
-1. VSIX 파일을 다운로드 받습니다.
-2. VS Code 메뉴에서 "보기 > 명령 팔레트"를 선택하거나 `Ctrl+Shift+P`(Windows/Linux) 또는 `Cmd+Shift+P`(Mac)를 누릅니다.
-3. "Extensions: Install from VSIX"를 검색하여 선택합니다.
-4. 다운로드 받은 VSIX 파일을 선택합니다.
+- VS Code 1.74.0 or higher
+- Valid JIRA server URL and PAT token
 
-## 초기 설정하기
+## Simple and Clean
 
-1. 플러그인을 설치한 후, 명령 팔레트(Ctrl+Shift+P 또는 Cmd+Shift+P)를 열고 "Jira-plugin: Setup credentials"를 실행합니다.
+This extension is intentionally minimal:
+- No complex features
+- No working issue tracking
+- No timers or status bars
+- Just view issues and open them in browser
 
-2. 다음 정보를 입력합니다:
-   - Jira URL: Jira 서버 URL (예: https://your-jira-server.com)
-   - 사용자 ID: Jira 로그인 아이디
-   - 비밀번호/PAT: Jira 비밀번호 또는 개인 접근 토큰(PAT)
-
-3. 설정이 완료되면 작업 프로젝트를 선택해야 합니다. 하단 상태 바의 Jira 아이콘을 클릭하거나 명령 팔레트에서 "Jira-plugin: Set working project"를 실행하세요.
-
-## 이슈 탐색하기
-
-왼쪽 사이드바의 Jira 아이콘을 클릭하면 이슈 탐색기가 열립니다. 여기서 다양한 방법으로 이슈를 조회할 수 있습니다:
-
-- 기본 JQL 검색
-- 모든 이슈
-- 현재 스프린트 이슈
-- ID로 이슈 검색
-- 상태별 필터링
-- 상태 및 담당자별 필터링
-- 요약으로 검색
-- 내 이슈 (상태별)
-- 즐겨찾기 필터
-
-## 작업 중인 이슈 설정하기
-
-1. 이슈 탐색기에서 이슈를 선택한 후 우클릭하여 컨텍스트 메뉴를 엽니다.
-2. "Set as working issue"를 선택합니다.
-3. 또는 상태 바의 "No working issue"를 클릭하여 작업 이슈를 선택할 수 있습니다.
-
-작업 중인 이슈를 설정하면 시간 추적이 자동으로 시작됩니다. 상태 바에서 현재 작업 시간을 확인할 수 있습니다.
-
-## 이슈 관리하기
-
-이슈 탐색기에서 이슈를 선택한 후 우클릭하면 다음 작업을 수행할 수 있습니다:
-
-- 코멘트 추가: 이슈에 코멘트를 추가합니다.
-- 담당자 변경: 이슈의 담당자를 변경합니다.
-- 상태 변경: 이슈의 상태를 변경합니다.
-- 이슈 키+요약 복사: 이슈 ID와 제목을 클립보드에 복사합니다.
-- Jira URL 복사: 이슈의 웹 주소를 클립보드에 복사합니다.
-- Git 브랜치 관리: 이슈 기반으로 Git 브랜치를 생성하거나 체크아웃합니다.
-
-## 새 이슈 생성하기
-
-1. 이슈 탐색기 상단의 + 아이콘을 클릭하거나, 명령 팔레트에서 "Jira-plugin: Create issue"를 실행합니다.
-2. 필요한 정보(제목, 설명, 우선순위 등)를 입력합니다.
-3. 생성 버튼을 클릭하면 새 이슈가 생성됩니다.
-
-## 시간 추적
-
-작업 이슈가 설정되면 플러그인이 자동으로 시간을 추적합니다. 시간 추적 모드는 설정에서 변경할 수 있습니다:
-
-- `hybrid`: VS Code가 일정 시간 이상 비활성 상태일 때 시간 추적을 중지합니다.
-- `always`: 항상 시간을 추적합니다.
-- `vsCodeFocus`: VS Code가 포커스를 가질 때만 시간을 추적합니다.
-- `never`: 시간 추적을 사용하지 않습니다.
-
-## Git 연동
-
-설정에서 "Git Integration" 옵션을 활성화하면, Git 브랜치 전환 시 해당 브랜치 이름에 포함된 이슈 ID를 기반으로 작업 이슈가 자동으로 설정됩니다.
-
-## 자주 사용하는 명령어
-
-명령 팔레트(Ctrl+Shift+P 또는 Cmd+Shift+P)에서 "Jira-plugin"으로 시작하는 명령어를 찾을 수 있습니다:
-
-- **Setup credentials**: 인증 정보 설정
-- **Set working project**: 작업 프로젝트 설정
-- **Set working issue**: 작업 이슈 설정
-- **Stop working issue**: 작업 이슈 중지
-- **Create issue**: 새 이슈 생성
-- **Toggle working issue timer**: 작업 이슈 타이머 토글
-
-## 주요 설정 옵션
-
-VS Code 설정(Ctrl+,)에서 "jira-plugin"을 검색하여 다음과 같은 설정을 변경할 수 있습니다:
-
-- **Base Url**: Jira 서버 URL
-- **Username**: 사용자 ID
-- **Working Project**: 작업 프로젝트
-- **Working Issue Statues**: 작업 이슈로 설정할 수 있는 상태 목록
-- **Tracking Time Mode**: 시간 추적 모드
-- **Git Integration**: Git 연동 활성화 여부
-
-## 문제 해결
-
-- **인증 오류**: 인증 정보가 올바른지 확인하세요.
-- **이슈가 보이지 않음**: 작업 프로젝트가 올바르게 설정되었는지 확인하세요.
-- **SSL 인증서 오류**: 설정에서 "strictSSL"을 "false"로 변경해보세요.
-
-## 라이센스
-
-이 플러그인은 MIT 라이센스로 배포됩니다.
+Perfect as a JIRA remote control!

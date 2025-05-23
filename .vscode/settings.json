@@ -8,11 +8,5 @@
   },
   "search.exclude": {
     "out": true // set this to false to include "out" folder in search results
-  },
-  "workbench.colorCustomizations": {
-    "titleBar.activeBackground": "#e6e6e6",
-    "titleBar.activeForeground": "#000000",
-    "titleBar.inactiveBackground": "#e6e6e6CC",
-    "titleBar.inactiveForeground": "#000000"
   }
 }

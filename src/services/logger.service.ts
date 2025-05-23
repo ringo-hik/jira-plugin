@@ -1,54 +1,35 @@
 import * as vscode from 'vscode';
-import { store } from '.';
 
 export default class LoggerService {
-  public printErrorMessageInOutputAndShowAlert(err: any) {
-    if (store.state.channel) {
-      // Skip SSL/TLS/certificate related errors
-      const errorMessage = err.message || err;
-      if (typeof errorMessage === 'string' && 
-          (errorMessage.includes('SSL') || 
-           errorMessage.includes('TLS') ||
-           errorMessage.includes('certificate') || 
-           errorMessage.includes('cert'))) {
-        // Skip SSL related errors
-        return;
-      }
-      
-      vscode.window.showErrorMessage(`Check logs in Jira Plugin terminal output.`);
-      store.state.channel.append(`${errorMessage}\n`);
-    }
+  private outputChannel: vscode.OutputChannel | undefined;
+
+  public initialize(context: vscode.ExtensionContext): void {
+    this.outputChannel = vscode.window.createOutputChannel('JIRA-PLUGIN');
+    context.subscriptions.push(this.outputChannel);
   }
 
-  public printErrorMessageInOutput(err: any) {
-    if (store.state.channel) {
-      // Skip logging SSL related errors
-      const errorMessage = err.message || err;
-      if (typeof errorMessage === 'string' && 
-          (errorMessage.includes('SSL') || 
-           errorMessage.includes('certificate') || 
-           errorMessage.includes('cert'))) {
-        // Skip SSL related errors
-        return;
-      }
-      store.state.channel.append(`${errorMessage}\n`);
-    }
+  public printInfoMessageInOutput(message: string): void {
+    this.print('INFO', message);
   }
 
-  private debugMode() {
-    const editor = vscode.window.activeTextEditor;
-    if (editor && editor.document) {
-      const text = editor.document.getText();
-      if (text.indexOf('JIRA_PLUGIN_DEBUG_MODE') !== -1) {
-        return true;
-      }
-    }
-    return false;
+  public printErrorMessageInOutput(message: string): void {
+    this.print('ERROR', message);
   }
 
-  public jiraPluginDebugLog(message: string, value: any) {
-    if (this.debugMode() && store.state.channel) {
-      store.state.channel.append(`${message}: ${value}\n`);
+  public printErrorMessageInOutputAndShowAlert(error: Error | string): void {
+    const message = error instanceof Error ? error.message : error;
+    this.printErrorMessageInOutput(message);
+    vscode.window.showErrorMessage(message);
+  }
+
+  private print(level: string, message: string): void {
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] [${level}] ${message}`;
+    
+    if (this.outputChannel) {
+      this.outputChannel.appendLine(logMessage);
     }
+    
+    console.log(logMessage);
   }
 }
