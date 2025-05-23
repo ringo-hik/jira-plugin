@@ -44,17 +44,14 @@ export default async function setupCredentials(): Promise<void> {
     }
 
     // PAT 토큰 입력
-    const isCloud = baseUrl.includes('atlassian.net');
     const password = await vscode.window.showInputBox({
       ignoreFocusOut: true,
       password: true,
-      placeHolder: isCloud ? 'API Token' : 'Password or Personal Access Token',
-      prompt: isCloud 
-        ? 'Enter your Atlassian API token (create at https://id.atlassian.com/manage/api-tokens)'
-        : 'Enter your JIRA password or Personal Access Token',
+      placeHolder: 'Password or Personal Access Token',
+      prompt: 'Enter your JIRA password or Personal Access Token (PAT)',
       validateInput: (value) => {
         if (!value || value.trim() === '') {
-          return isCloud ? 'API token is required' : 'Password/PAT is required';
+          return 'Password/PAT is required';
         }
         return null;
       }

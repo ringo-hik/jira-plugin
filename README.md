@@ -4,7 +4,7 @@ A simple VS Code extension for viewing JIRA issues and opening them in your brow
 
 ## Features
 
-- Connect to JIRA using URL and Personal Access Token (PAT)
+- Connect to JIRA Server/Data Center using Basic Authentication
 - Add multiple projects to monitor
 - View recent 50 issues per project
 - View your assigned issues per project
@@ -17,10 +17,8 @@ A simple VS Code extension for viewing JIRA issues and opening them in your brow
 2. Click on the JIRA icon in the activity bar
 3. Click "Setup JIRA Connection"
 4. Enter your JIRA server URL (e.g., https://jira.company.com)
-5. Enter your username/email
-6. Enter your authentication token:
-   - **Atlassian Cloud**: Use API token (create at https://id.atlassian.com/manage/api-tokens)
-   - **JIRA Server/Data Center**: Use password or Personal Access Token
+5. Enter your username
+6. Enter your password or Personal Access Token (PAT)
 
 ## Usage
 
@@ -33,15 +31,13 @@ A simple VS Code extension for viewing JIRA issues and opening them in your brow
 
 - VS Code 1.74.0 or higher
 - JIRA Server/Data Center 7.0 or higher
-- JIRA Cloud (all versions)
-- Valid JIRA server URL and PAT token
+- Valid JIRA server URL and credentials
 
 ## Supported JIRA Versions
 
 - **JIRA Server**: 7.0+, 8.x, 9.x
 - **JIRA Data Center**: 7.0+, 8.x, 9.x
-- **JIRA Cloud**: All versions
-- Uses REST API v2 for maximum compatibility
+- Uses REST API v2 with Basic Authentication
 
 ## Simple and Clean
 
