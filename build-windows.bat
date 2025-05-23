@@ -1,6 +1,6 @@
 @echo off
 echo ========================================
-echo JIRA Plugin Build Script
+echo JIRA Plugin Build Script (Windows)
 echo ========================================
 echo.
 
@@ -26,23 +26,20 @@ if errorlevel 1 (
 echo Dependencies installed successfully!
 echo.
 
-echo [3/6] Installing rimraf for cross-platform clean...
-call npm install
-if errorlevel 1 (
-    echo ERROR: Failed to install dependencies!
-    pause
-    exit /b 1
+echo [3/5] Cleaning previous build...
+if exist "out" (
+    echo Removing out folder...
+    rmdir /s /q "out"
 )
-echo.
-
-echo [4/6] Cleaning previous build...
-if exist "out" rmdir /s /q "out"
-if exist "*.vsix" del /q "*.vsix"
+if exist "*.vsix" (
+    echo Removing old VSIX files...
+    del /q "*.vsix"
+)
 echo Clean completed!
 echo.
 
-echo [5/6] Compiling TypeScript...
-call npm run compile
+echo [4/5] Compiling TypeScript...
+call npx tsc -p ./
 if errorlevel 1 (
     echo ERROR: TypeScript compilation failed!
     pause
@@ -51,7 +48,7 @@ if errorlevel 1 (
 echo TypeScript compilation successful!
 echo.
 
-echo [6/6] Creating VSIX package...
+echo [5/5] Creating VSIX package...
 where vsce >nul 2>&1
 if errorlevel 1 (
     echo vsce not found. Installing globally...
@@ -70,14 +67,14 @@ echo ========================================
 echo BUILD SUCCESSFUL!
 echo ========================================
 echo.
-echo VSIX file created: jira-plugin-2.0.0.vsix
+for %%f in (*.vsix) do echo VSIX file created: %%f
 echo.
 echo To install in VS Code:
 echo   1. Open VS Code
 echo   2. Press Ctrl+Shift+P
 echo   3. Type: Extensions: Install from VSIX
-echo   4. Select the jira-plugin-2.0.0.vsix file
+echo   4. Select the VSIX file
 echo.
-echo Or run: code --install-extension jira-plugin-2.0.0.vsix
+echo Or run: code --install-extension [filename].vsix
 echo.
 pause
