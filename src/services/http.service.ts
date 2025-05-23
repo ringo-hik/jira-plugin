@@ -25,7 +25,17 @@ export default class HttpService {
       return response.data;
     } catch (error: any) {
       if (error.response?.status === 401) {
-        throw new Error('Authentication failed. Please check your username and PAT/password.');
+        console.error('401 Error Details:', {
+          url: error.config?.url,
+          method: error.config?.method,
+          headers: error.config?.headers,
+          auth: error.config?.auth ? 'Present' : 'Missing'
+        });
+        throw new Error(`Authentication failed (401). Please check:
+1. Username is correct
+2. Password/PAT is valid
+3. Your account has API access permissions
+4. No IP restrictions are blocking access`);
       }
       throw error;
     }
@@ -37,7 +47,17 @@ export default class HttpService {
       return response.data;
     } catch (error: any) {
       if (error.response?.status === 401) {
-        throw new Error('Authentication failed. Please check your username and PAT/password.');
+        console.error('401 Error Details:', {
+          url: error.config?.url,
+          method: error.config?.method,
+          headers: error.config?.headers,
+          auth: error.config?.auth ? 'Present' : 'Missing'
+        });
+        throw new Error(`Authentication failed (401). Please check:
+1. Username is correct
+2. Password/PAT is valid
+3. Your account has API access permissions
+4. No IP restrictions are blocking access`);
       }
       throw error;
     }

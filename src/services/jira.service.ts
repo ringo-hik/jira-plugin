@@ -17,8 +17,13 @@ export default class JiraService {
       this.username = configuration.get(CONFIG.USERNAME);
       const password = configuration.getPassword();
 
+      logger.printInfoMessageInOutput(`Initializing JIRA connection...`);
+      logger.printInfoMessageInOutput(`Base URL: ${this.baseUrl}`);
+      logger.printInfoMessageInOutput(`Username: ${this.username}`);
+      logger.printInfoMessageInOutput(`Password: ${password ? '[HIDDEN]' : '[MISSING]'}`);
+
       if (!this.baseUrl || !this.username || !password) {
-        throw new Error('Missing JIRA configuration');
+        throw new Error(`Missing JIRA configuration - URL: ${!!this.baseUrl}, Username: ${!!this.username}, Password: ${!!password}`);
       }
 
       this.httpService = new HttpService(this.baseUrl, {
@@ -27,10 +32,12 @@ export default class JiraService {
       });
 
       // Test connection
-      await this.httpService.get('/rest/api/2/myself');
-      logger.printInfoMessageInOutput('JIRA connection established');
-    } catch (error) {
+      logger.printInfoMessageInOutput('Testing connection with /rest/api/2/myself...');
+      const myself = await this.httpService.get('/rest/api/2/myself');
+      logger.printInfoMessageInOutput(`JIRA connection established! User: ${myself.displayName} (${myself.name})`);
+    } catch (error: any) {
       this.httpService = null;
+      logger.printErrorMessageInOutput(`JIRA initialization failed: ${error.message}`);
       throw error;
     }
   }
