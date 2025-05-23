@@ -15,7 +15,7 @@ export default class JiraService {
     try {
       this.baseUrl = configuration.get(CONFIG.BASE_URL);
       this.username = configuration.get(CONFIG.USERNAME);
-      const password = configuration.get(CONFIG.JIRA_PAT_AUTH);
+      const password = configuration.getPassword();
 
       if (!this.baseUrl || !this.username || !password) {
         throw new Error('Missing JIRA configuration');

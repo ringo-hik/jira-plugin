@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { configuration, jira, logger } from '../services';
+import { configuration, jira, logger, issuesExplorer } from '../services';
 import { CONFIG } from '../shared/constants';
 
 export default async function setupCredentials(): Promise<void> {
@@ -71,6 +71,7 @@ export default async function setupCredentials(): Promise<void> {
     // 연결 테스트
     try {
       await jira.initialize();
+      issuesExplorer.refresh();
       vscode.window.showInformationMessage('JIRA connection successful!');
     } catch (error) {
       throw new Error(`Connection failed: ${error.message}`);

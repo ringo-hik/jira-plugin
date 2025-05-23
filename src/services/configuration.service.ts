@@ -3,10 +3,10 @@ import { store } from '.';
 import { CONFIG, CONFIG_NAME } from '../shared/constants';
 
 export default class ConfigurationService {
-  private settings: vscode.WorkspaceConfiguration;
+  constructor() {}
 
-  constructor() {
-    this.settings = vscode.workspace.getConfiguration(CONFIG_NAME);
+  private getSettings(): vscode.WorkspaceConfiguration {
+    return vscode.workspace.getConfiguration(CONFIG_NAME);
   }
 
   public isValid(): boolean {
@@ -18,11 +18,11 @@ export default class ConfigurationService {
   }
 
   public get(key: string): string {
-    return this.settings.get(key, '');
+    return this.getSettings().get(key, '');
   }
 
   public async set(key: string, value: string): Promise<void> {
-    await this.settings.update(key, value, vscode.ConfigurationTarget.Global);
+    await this.getSettings().update(key, value, vscode.ConfigurationTarget.Global);
   }
 
   public getPassword(): string {
